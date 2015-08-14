@@ -3,6 +3,9 @@
 </head>
 
 <body>
+</body>
+
+<template name="home">
   <form class="new-event">
     <input type="text" name="name" placeholder="Name" />
     <input type="text" name="url" placeholder="Youtube URL" />
@@ -11,15 +14,15 @@
 
   <p>Current URL: {{currentEvent.url}}</p>
 
-  <iframe width="560" height="315" src="{{currentEvent.url}}?autoplay=0" frameborder="0" allowfullscreen></iframe>
+  <iframe width="560" height="315" src="{{currentEvent.url}}?autoplay=1" frameborder="0" allowfullscreen></iframe>
 
-  <p>Events:</p>
+  <p>Events (sorted by last triggered):</p>
   <ul>
     {{#each events}}
       {{> event}}
     {{/each}}
   </ul>
-</body>
+</template>
 
 <template name="event">
 	<li>
@@ -29,4 +32,8 @@
 
 		<button class="delete">&times;</button>
 	</li>
+</template>
+
+<template name="triggerEvent">
+	<p>Triggered event: {{event.name}}</p>
 </template>

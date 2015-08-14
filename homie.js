@@ -1,7 +1,26 @@
+// Create Events collection
 Events = new Mongo.Collection("events");
 
+// Routing
+Router.route('/', function() {
+  this.render('home');
+});
+
+Router.route('/triggerEvent/:name', function() {
+  // Get event by name and trigger it
+  var event = Events.findOne({name: this.params.name});
+  Meteor.call("triggerEvent", event._id);
+
+  // Render the triggerEvent template and pass the event
+  this.render('triggerEvent', {
+    data: {
+      event: event
+    }
+  });
+});
+
 if (Meteor.isClient) {
-  Template.body.helpers({
+  Template.home.helpers({
     currentEvent: function () {
       return Events.findOne({}, {sort: {lastPlayed: -1}});
     },
@@ -10,7 +29,7 @@ if (Meteor.isClient) {
     }
   });
 
-  Template.body.events({
+  Template.home.events({
     "submit .new-event": function (event) {
       // Prevent default browser form submit
       event.preventDefault();
@@ -45,7 +64,6 @@ if (Meteor.isClient) {
       Meteor.call("triggerEvent", this._id);
     }
   });
-
 }
 
 if (Meteor.isServer) {
