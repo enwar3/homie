@@ -1,0 +1,23 @@
+<head>
+  <title>homie</title>
+</head>
+
+<body>
+  <form class="new-youtube">
+    <input type="text" name="text" placeholder="Play a new URL" />
+  </form>
+
+  <p>Current URL: {{currentYoutube}}</p>
+
+  <iframe width="560" height="315" src="{{currentYoutube}}?autoplay=1" frameborder="0" allowfullscreen></iframe>
+
+  <ul>
+    {{#each youtubeList}}
+      {{> youtube}}
+    {{/each}}
+  </ul>
+</body>
+
+<template name="youtube">
+	<p>{{url}}</p>
+</template>
