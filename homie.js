@@ -7,17 +7,14 @@ Router.route('/', function() {
 });
 
 Router.route('/triggerEvent/:name', function() {
-  // Set reactive = false to avoid infinite loop; look into this later
-  var event = Events.findOne({name: this.params.name}, {reactive: false});
+  // Find and trigger this event
+  var event = Events.findOne({name: this.params.name});
   Meteor.call("triggerEvent", event._id);
 
-  // Pass on the event name
-  this.render('triggerEvent', {
-    data: {
-      eventName: event.name
-    }
-  });
-});
+  // Return server response
+  var res = this.response;
+  res.end('Triggered event!\n');
+}, {where: 'server'});
 
 if (Meteor.isClient) {
   Template.home.helpers({
