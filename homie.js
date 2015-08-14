@@ -109,11 +109,6 @@ function updateTime() {
   minutes = now.getMinutes();
   seconds = now.getSeconds();
 
-  // First trigger the null event as a hack in case wakeup is the current event
-  if (hours == 8 && minutes == 59 && seconds == 0) {
-    Meteor.call("triggerEvent", Events.findOne({name: 'null'}));
-  }
-
   // Trigger wakeup event
   if (hours == 9 && minutes == 0 && seconds == 0) {
     Meteor.call("triggerEvent", Events.findOne({name: 'wakeup'}));
