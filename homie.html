@@ -3,21 +3,30 @@
 </head>
 
 <body>
-  <form class="new-youtube">
-    <input type="text" name="text" placeholder="Play a new URL" />
+  <form class="new-event">
+    <input type="text" name="name" placeholder="Name" />
+    <input type="text" name="url" placeholder="Youtube URL" />
+    <input type="submit" />
   </form>
 
-  <p>Current URL: {{currentYoutube}}</p>
+  <p>Current URL: {{currentEvent.url}}</p>
 
-  <iframe width="560" height="315" src="{{currentYoutube}}?autoplay=1" frameborder="0" allowfullscreen></iframe>
+  <iframe width="560" height="315" src="{{currentEvent.url}}?autoplay=0" frameborder="0" allowfullscreen></iframe>
 
+  <p>Events:</p>
   <ul>
-    {{#each youtubeList}}
-      {{> youtube}}
+    {{#each events}}
+      {{> event}}
     {{/each}}
   </ul>
 </body>
 
-<template name="youtube">
-	<p>{{url}}</p>
+<template name="event">
+	<li>
+		<span><strong>{{name}}:</strong> {{url}}</span>
+
+		<button class="trigger">trigger</button>
+
+		<button class="delete">&times;</button>
+	</li>
 </template>
