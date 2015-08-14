@@ -7,14 +7,14 @@ Router.route('/', function() {
 });
 
 Router.route('/triggerEvent/:name', function() {
-  // Get event by name and trigger it
-  var event = Events.findOne({name: this.params.name});
+  // Set reactive = false to avoid infinite loop; look into this later
+  var event = Events.findOne({name: this.params.name}, {reactive: false});
   Meteor.call("triggerEvent", event._id);
 
-  // Render the triggerEvent template and pass the event
+  // Pass on the event name
   this.render('triggerEvent', {
     data: {
-      event: event
+      eventName: event.name
     }
   });
 });
@@ -86,13 +86,11 @@ Meteor.methods({
 
   // Delete this event
   deleteEvent: function (eventId) {
-    var event = Events.findOne(eventId);
     Events.remove(eventId);
   },
 
   // Trigger this event by setting lastPlayed to now
   triggerEvent: function (eventId) {
-    var event = Events.findOne(eventId);
     Events.update(eventId, { $set: { lastPlayed: new Date() } });
   }
 });
