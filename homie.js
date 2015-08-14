@@ -17,12 +17,22 @@ Router.route('/triggerEvent/:name', function() {
 }, {where: 'server'});
 
 if (Meteor.isClient) {
+  // Set up timer
+  Meteor.startup(function () {
+    setInterval(function () {
+      updateTime();
+    }, 500);
+  });
+
   Template.home.helpers({
     currentEvent: function () {
       return Events.findOne({}, {sort: {lastPlayed: -1}});
     },
     events: function() {
       return Events.find({}, {sort: {lastPlayed: -1}});
+    },
+    currentTime: function() {
+      return Session.get("time");
     }
   });
 
@@ -89,5 +99,26 @@ Meteor.methods({
   // Trigger this event by setting lastPlayed to now
   triggerEvent: function (eventId) {
     Events.update(eventId, { $set: { lastPlayed: new Date() } });
-  }
+  },
 });
+
+// Update the time on the session, and make a wakeup call if necessary
+function updateTime() {
+  now = new Date();
+  hours = now.getHours();
+  minutes = now.getMinutes();
+  seconds = now.getSeconds();
+
+  // First trigger the null event as a hack in case wakeup is the current event
+  if (hours == 8 && minutes == 59 && seconds == 0) {
+    Meteor.call("triggerEvent", Events.findOne({name: 'null'}));
+  }
+
+  // Trigger wakeup event
+  if (hours == 9 && minutes == 0 && seconds == 0) {
+    Meteor.call("triggerEvent", Events.findOne({name: 'wakeup'}));
+  }
+
+  // Update session with current time
+  Session.set("time", now);
+}
