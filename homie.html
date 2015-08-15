@@ -38,6 +38,7 @@
         Add new event type:
         <input type="text" name="name" placeholder="Name" />
         <input type="text" name="description" placeholder="Description" />
+        <input type="text" name="say" placeholder="Say" />
         <input type="text" name="url" placeholder="Youtube URL" />
         <input type="submit" />
       </form>
@@ -48,6 +49,7 @@
             <tr>
               <th>Name</th>
               <th>Description</th>
+              <th>Say</th>
               <th>URL</th>
               <th>Actions</th>
             </tr>
@@ -77,6 +79,7 @@
   <tr>
     <td>{{name}}</td>
     <td>{{description}}</td>
+    <td>{{say}}</td>
     <td>{{url}}</td>
     <td>
       <button class="trigger">trigger</button>

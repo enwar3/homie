@@ -20,11 +20,23 @@ Router.route('/triggerEventType/:name', function () {
 // TODO publish database objects from server
 
 if (Meteor.isClient) {
-  // Set up timer
   Meteor.startup(function () {
+    // Set up timer
     setInterval(function () {
       updateTime();
     }, 500);
+
+    // Load speech synthesis voice
+    window.speechSynthesis.onvoiceschanged = function() {
+      speechVoice = window.speechSynthesis.getVoices()[1];
+    }
+
+    // Observe when current event changes (TODO look at why this fires on initial load)
+    Events.find({}).observe({
+      added: function (newDocument) {
+        handleNewEvent(newDocument);
+      }
+    })
   });
 
   Template.home.helpers({
@@ -51,6 +63,7 @@ if (Meteor.isClient) {
       var url = event.target.url.value;
       var name = event.target.name.value;
       var description = event.target.description.value;
+      var say = event.target.say.value;
 
       // Don't submit form unless we have both
       if (!url || !name || !description) {
@@ -58,12 +71,13 @@ if (Meteor.isClient) {
       }
  
       // Insert an event into the collection
-      Meteor.call("addEventType", name, description, url);
+      Meteor.call("addEventType", name, description, say, url);
  
       // Clear form
       event.target.url.value = "";
       event.target.name.value = "";
       event.target.description.value = "";
+      event.target.say.value = "";
     }
   });
 
@@ -90,10 +104,11 @@ if (Meteor.isServer) {
 // Database methods
 Meteor.methods({
   // Add a new event
-  addEventType: function (name, description, url) {
+  addEventType: function (name, description, say, url) {
     EventTypes.insert({
       name: name,
       description: description,
+      say: say,
       url: url,
       createdAt: new Date()
     });
@@ -128,4 +143,14 @@ function updateTime() {
 
   // Update session with current time
   Session.set("time", now);
+}
+
+function handleNewEvent(event) {
+  // Speak the appropriate phrase for this event
+  var msg = new SpeechSynthesisUtterance(event.eventType.say);
+  msg.voice = speechVoice;
+  msg.rate = .8;
+  msg.pitch = .7;
+  msg.volume = 1;
+  window.speechSynthesis.speak(msg);
 }
