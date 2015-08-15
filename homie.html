@@ -6,35 +6,83 @@
 </body>
 
 <template name="home">
-  <p>{{currentTime}}</p>
+  <div class="container text-center">
+    <div class="row">
+      <h4>Hi, I'm Homie. I tell you what happens at home.</h4>
+      <p>Time: {{formatDate currentTime}}</p>
+    </div>
 
-  <form class="new-event">
-    <label>Add new event:</label>
-    <input type="text" name="name" placeholder="Name" />
-    <input type="text" name="url" placeholder="Youtube URL" />
-    <input type="submit" />
-  </form>
+    <div class="row">
+      <h3>Last Event:</h3>
+      <h3 class="title-last-event"><strong>{{currentEvent.eventType.description}}</strong> at {{formatTime currentEvent.createdAt}}</h3>
 
-  <p>Current event video: {{currentEvent.url}}</p>
+      <iframe width="304" height="171" src="{{currentEvent.eventType.url}}?autoplay=1" frameborder="0" allowfullscreen></iframe>
+    </div>
 
-  <iframe width="560" height="315" src="{{currentEvent.url}}?autoplay=1" frameborder="0" allowfullscreen></iframe>
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <h3>Past Events:</h3>
+        <table class="table table-events">
+          <tbody>
+            {{#each events}}
+              {{> event}}
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-  <p>Events (sorted by last triggered):</p>
-  <ul>
-    {{#each events}}
-      {{> event}}
-    {{/each}}
-  </ul>
+    <div class="row">
+      <h3>Event Types:</h3>
+      <form class="new-event-type">
+        Add new event type:
+        <input type="text" name="name" placeholder="Name" />
+        <input type="text" name="description" placeholder="Description" />
+        <input type="text" name="url" placeholder="Youtube URL" />
+        <input type="submit" />
+      </form>
+
+      <div class="col-md-8 col-md-offset-2 text-left">
+        <table class="table table-events">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>URL</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each eventTypes}}
+              {{> eventType}}
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+  </div>
 </template>
 
 <template name="event">
-  <li>
-    <span><strong>{{name}}:</strong> {{url}}</span>
+  <tr>
+    <td>{{eventType.description}}</td>
+    <td>{{formatDate createdAt}}</td>
+  </tr>
+</template>
 
-    <button class="trigger">trigger</button>
 
-    <button class="delete">&times;</button>
-  </li>
+<template name="eventType">
+  <tr>
+    <td>{{name}}</td>
+    <td>{{description}}</td>
+    <td>{{url}}</td>
+    <td>
+      <button class="trigger">trigger</button>
+      <button class="delete">&times;</button>
+    </td>
+  </tr>
 </template>
 
 <template name="triggerEvent">

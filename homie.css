@@ -1,1 +1,12 @@
 /* CSS declarations go here */
+.row {
+	margin-bottom: 20px;
+}
+
+.title-last-event {
+	font-size: 3em;
+}
+
+.table.table-events td {
+	padding: 2px;
+}
