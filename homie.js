@@ -166,8 +166,8 @@ function turnOnLights()
 
   // Turn on the lights!
   hueUser.setLightState(1, { on: true, sat:254, bri:254, hue:55000}, function(data) { /* ... */ });
-  hueUser.setLightState(2, { on: true, sat:254, bri:254, hue:1234 }, function(data) { /* ... */ });
-  hueUser.setLightState(3, { on: true, sat:254, bri:254, hue:6666 }, function(data) { /* ... */ });
+  hueUser.setLightState(2, { on: true, sat:254, bri:254, hue:46000 }, function(data) { /* ... */ });
+  hueUser.setLightState(3, { on: true, sat:254, bri:254, hue:1234 }, function(data) { /* ... */ });
 }
 
 // On Walk Out
