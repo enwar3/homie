@@ -2,6 +2,12 @@
 EventTypes = new Mongo.Collection("eventTypes");
 Events = new Mongo.Collection("events");
 
+// Hue
+var hue = jsHue();
+var HUE_USERNAME = "ac02a0dd2097c71068a6c934e7fe3"
+var hueUser = bridge.user(HUE_USERNAME)
+user.setLightState(1, { on: false }, function(data) { /* ... */ });
+
 // Routing
 Router.route('/', function () {
   this.render('home');
