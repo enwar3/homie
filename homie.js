@@ -155,14 +155,52 @@ function handleNewEvent(event) {
   msg.volume = 1;
   window.speechSynthesis.speak(msg);
 
-  // Hue
-  var hue = jsHue();
-  console.log(hue);
-  //var HUE_USERNAME = "ac02a0dd2097c71068a6c934e7fe3"
-  //var hueUser = bridge.user(HUE_USERNAME)
-  //user.setLightState(1, { on: false }, function(data) { /* ... */ });
+  turnOnLights();
 }
 
+// On Walk In
+function turnOnLights()
+{
+  // Login
+  hueUser = loginToHue();
+
+  // Turn on the lights!
+  hueUser.setLightState(1, { on: true, sat:254, bri:254, hue:55000}, function(data) { /* ... */ });
+  hueUser.setLightState(2, { on: true, sat:254, bri:254, hue:1234 }, function(data) { /* ... */ });
+  hueUser.setLightState(3, { on: true, sat:254, bri:254, hue:6666 }, function(data) { /* ... */ });
+}
+
+// On Walk Out
+function turnOffLights()
+{
+  // Login
+  hueUser = loginToHue();
+
+  // Turn on the lights!
+  hueUser.setLightState(1, { on: false }, function(data) { /* ... */ });
+  hueUser.setLightState(2, { on: false }, function(data) { /* ... */ });
+  hueUser.setLightState(3, { on: false }, function(data) { /* ... */ });
+}
+
+
+function loginToHue()
+{
+  // Login info
+  var HUE_BRIDGE_IP = '192.168.1.3'
+  var HUE_USERNAME = "ac02a0dd2097c71068a6c934e7fe3"
+
+  // Configure the hue account
+  var hue = jsHue();
+  var bridge = hue.bridge(HUE_BRIDGE_IP);
+  var user = bridge.user(HUE_USERNAME)
+
+  return user;
+}
+
+
+/**
+    Figure out how to get this into a separate file  
+**/
 
 /**
  * jsHue
